@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
-<title>حساب الأستاذ — المتحدون | 20260604171807</title>
+<title>حساب الأستاذ — المتحدون | 20260604183504</title>
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Cairo:wght@400;600;700&display=swap" rel="stylesheet">
 <style>
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
@@ -215,7 +215,7 @@ html,body{height:100%;background:var(--bg);color:var(--t1);font-family:var(--fon
   <div class="logo">GL</div>
   <div class="brand">
     <b>المتحدون للمقاولات العامة</b>
-    <span style="font-size:10px;color:var(--t2)">حساب الأستاذ العام · أحمد كامل · آخر تحديث: 2026/06/04  17:18:07</span>
+    <span style="font-size:10px;color:var(--t2)">حساب الأستاذ العام · أحمد كامل · آخر تحديث: 2026/06/04  18:35:04</span>
   </div>
   <div class="top-search" onclick="openS()">⌕</div>
 </div>
@@ -369,19 +369,24 @@ function N(n,d=0){if(n==null)return'—';return new Intl.NumberFormat('en-US',{m
 function S(n){const a=Math.abs(n);if(a>=1e9)return(n/1e9).toFixed(1)+'B';if(a>=1e6)return(n/1e6).toFixed(1)+'M';if(a>=1e3)return(n/1e3).toFixed(0)+'K';return N(n,0)}
 
 function init(){
-  const total=D.length;
-  const tc=D.reduce((s,a)=>s+a.cnt,0),act=D.filter(a=>a.cnt>0).length,zer=D.filter(a=>Math.abs(a.net)<.1).length;
-  document.getElementById('kp-tot').textContent=total;
-  document.getElementById('kp-cnt').textContent=N(tc);
-  document.getElementById('kp-act').textContent=act;
-  document.getElementById('kp-zer').textContent=zer;
-  document.getElementById('sb-cnt').textContent=N(tc);
-  document.getElementById('sb-act').textContent=act;
-  document.getElementById('nc-all').textContent=total;
-  document.getElementById('nc-zero').textContent=zer;
-  ORD.forEach(c=>{const n=D.filter(a=>a.cat===c).length;const e=document.getElementById('nc-'+c);if(e)e.textContent=n;});
-  buildSecs(D);
-  buildCF();
+  try{
+    const total=D.length;
+    const tc=D.reduce((s,a)=>s+(+a.cnt||0),0),act=D.filter(a=>a.cnt>0).length,zer=D.filter(a=>Math.abs(a.net)<.1).length;
+    document.getElementById('kp-tot').textContent=total;
+    document.getElementById('kp-cnt').textContent=N(tc);
+    document.getElementById('kp-act').textContent=act;
+    document.getElementById('kp-zer').textContent=zer;
+    document.getElementById('sb-cnt').textContent=N(tc);
+    document.getElementById('sb-act').textContent=act;
+    document.getElementById('nc-all').textContent=total;
+    document.getElementById('nc-zero').textContent=zer;
+    ORD.forEach(c=>{const n=D.filter(a=>a.cat===c).length;const e=document.getElementById('nc-'+c);if(e)e.textContent=n;});
+    buildSecs(D);
+    buildCF();
+  }catch(e){
+    var sec=document.getElementById('secs');
+    if(sec)sec.innerHTML='<div style="color:#ff6b6b;padding:24px;font-size:12px;direction:rtl">خطأ في تحميل البيانات: '+e.message+'<br><small>'+e.stack+'</small></div>';
+  }
 }
 function applyFilter(){buildSecs(D);buildCF();if(window._openAccId)openA(window._openAccId);}
 
@@ -646,19 +651,33 @@ function _mShowRptView(n){
 
 function _mRptExcel(tblId,fname,acc){
   var tbl=document.getElementById(tblId);if(!tbl)return;
-  var csv='﻿';
-  tbl.querySelectorAll('tr').forEach(function(row){
-    var cells=Array.from(row.querySelectorAll('th,td'));
-    csv+=cells.map(function(cell){
-      var t=cell.textContent.trim().replace(/
-/g,' ').replace(/"/g,'""');
-      return '"'+t+'"';
-    }).join(',')+'
-';
+  var rows='';
+  tbl.querySelectorAll('tr').forEach(function(tr,ri){
+    var isHdr=ri===0||tr.parentElement.tagName==='THEAD';
+    var cells='';
+    tr.querySelectorAll('th,td').forEach(function(td){
+      var t=td.textContent.trim().replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+      var clean=t.replace(/,/g,'');
+      if(!isNaN(parseFloat(clean))&&t!=='—'&&t!==''){
+        cells+='<Cell ss:StyleID="num"><Data ss:Type="Number">'+parseFloat(clean)+'</Data></Cell>';
+      } else {
+        cells+='<Cell ss:StyleID="'+(isHdr?'hdr':'txt')+'"><Data ss:Type="String">'+t+'</Data></Cell>';
+      }
+    });
+    rows+='<Row ss:Height="18">'+cells+'</Row>';
   });
-  var blob=new Blob([csv],{type:'text/csv;charset=UTF-8'});
+  var xml='<?xml version="1.0" encoding="UTF-8"?><?mso-application progid="Excel.Sheet"?>'
+    +'<Workbook xmlns="urn:schemas-microsoft-com:office:spreadsheet" xmlns:ss="urn:schemas-microsoft-com:office:spreadsheet">'
+    +'<Styles><Style ss:ID="hdr"><Font ss:Bold="1" ss:Color="#FFFFFF"/><Interior ss:Color="#1F4E79" ss:Pattern="Solid"/>'
+    +'<Alignment ss:Horizontal="Right" ss:ReadingOrder="RightToLeft"/></Style>'
+    +'<Style ss:ID="num"><Alignment ss:Horizontal="Center"/><NumberFormat ss:Format="#,##0.00"/></Style>'
+    +'<Style ss:ID="txt"><Alignment ss:Horizontal="Right" ss:ReadingOrder="RightToLeft"/></Style></Styles>'
+    +'<Worksheet ss:Name="تقرير"><Table>'+rows+'</Table>'
+    +'<WorksheetOptions xmlns="urn:schemas-microsoft-com:office:excel"><DisplayRightToLeft/></WorksheetOptions>'
+    +'</Worksheet></Workbook>';
+  var blob=new Blob(['﻿'+xml],{type:'application/vnd.ms-excel;charset=UTF-8'});
   var url=URL.createObjectURL(blob);
-  var a=document.createElement('a');a.href=url;a.download=fname+'.csv';
+  var a=document.createElement('a');a.href=url;a.download=fname+'.xls';
   document.body.appendChild(a);a.click();
   setTimeout(function(){document.body.removeChild(a);URL.revokeObjectURL(url);},100);
 }
