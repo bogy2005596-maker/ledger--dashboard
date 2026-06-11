@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
-<title>حساب الأستاذ — المتحدون | 20260611124128</title>
+<title>حساب الأستاذ — المتحدون | 20260611124426</title>
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Cairo:wght@400;600;700&display=swap" rel="stylesheet">
 <style>
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
@@ -215,7 +215,7 @@ html,body{height:100%;background:var(--bg);color:var(--t1);font-family:var(--fon
   <div class="logo">GL</div>
   <div class="brand">
     <b>المتحدون للمقاولات العامة</b>
-    <span style="font-size:10px;color:var(--t2)">حساب الأستاذ العام · أحمد كامل · آخر تحديث: 2026/06/11  12:41:28</span>
+    <span style="font-size:10px;color:var(--t2)">حساب الأستاذ العام · أحمد كامل · آخر تحديث: 2026/06/11  12:44:26</span>
   </div>
   <div class="top-search" onclick="openS()">⌕</div>
 </div>
@@ -660,52 +660,83 @@ function _mRptExcel(tblId,fname,acc){
   var colTags='';
   for(var ci=0;ci<nCols;ci++){var w=COL_W[ci]||'85';colTags+='<col style="width:'+w+'pt">';}
   var FONT="'Calibri','Arial',sans-serif";
-  var C1='#1F3864',C2='#2E75B6',C3='#EBF3FB';
-  var CGB='#FFF2CC',CGF='#7B4F00',CGB2='#BF9000';
-  var CTB='#D6E4F7',CTF='#1F3864';
-  var ri=0,tbody='';
-  var TS='background:'+C1+';color:#FFFFFF;font-weight:bold;font-size:14pt;text-align:center;vertical-align:middle;padding:10px;font-family:'+FONT+';';
-  var SS='background:'+C2+';color:#FFFFFF;font-size:11pt;text-align:center;vertical-align:middle;padding:6px;font-family:'+FONT+';';
-  var MS='background:'+C3+';color:'+C1+';font-size:9pt;text-align:right;vertical-align:middle;padding:4px 10px;font-family:'+FONT+';border-bottom:2.5px solid '+C1+';';
-  tbody+='<tr style="height:32pt"><td colspan="'+nCols+'" style="'+TS+'">شركة المتحدون للمقاولات العامة — أحمد كامل — نظام الأستاذ العام 2026</td></tr>';
-  tbody+='<tr style="height:22pt"><td colspan="'+nCols+'" style="'+SS+'">'+rptTitle+(accName?' — '+accName:'')+'</td></tr>';
-  tbody+='<tr style="height:18pt"><td colspan="'+nCols+'" style="'+MS+'">تاريخ التصدير: '+now+'</td></tr>';
-  tbody+='<tr style="height:3pt"><td colspan="'+nCols+'" style="background:'+C1+';padding:0;border:none"></td></tr>';
+  var C_HDR='#1F3864', C_HDR2='#2E75B6', C_META_BG='#EBF3FB';
+  var C_GRP_BG='#FFF2CC', C_GRP_FT='#7B4F00', C_GRP_BR='#BF9000';
+  var C_TOT_BG='#D6E4F7', C_TOT_FT='#1F3864';
+  var ri=0, tbody='';
+  var cStyle='background:'+C_HDR+';color:#FFFFFF;font-weight:bold;font-size:14pt;text-align:center;vertical-align:middle;padding:10px;font-family:'+FONT+';';
+  var sStyle='background:'+C_HDR2+';color:#FFFFFF;font-size:11pt;text-align:center;vertical-align:middle;padding:6px;font-family:'+FONT+';';
+  var mStyle='background:'+C_META_BG+';color:'+C_HDR+';font-size:9pt;text-align:right;vertical-align:middle;padding:4px 10px;font-family:'+FONT+';border-bottom:2.5px solid '+C_HDR+';';
+  tbody+='<tr style="height:32pt"><td colspan="'+nCols+'" style="'+cStyle+'">'شركة المتحدون للمقاولات العامة — أحمد كامل — نظام الأستاذ العام 2026'</td></tr>';
+  tbody+='<tr style="height:22pt"><td colspan="'+nCols+'" style="'+sStyle+'">'+rptTitle+(accName?' — '+accName:'')+'</td></tr>';
+  tbody+='<tr style="height:18pt"><td colspan="'+nCols+'" style="'+mStyle+'">'تاريخ التصدير: '+now+'</td></tr>';
+  tbody+='<tr style="height:3pt"><td colspan="'+nCols+'" style="background:'+C_HDR+';padding:0;border:none"></td></tr>';
   tbl.querySelectorAll('tr').forEach(function(tr){
     var isHdr=tr.parentElement.tagName==='THEAD';
     var isTot=tr.classList.contains('tot');
     var isGrp=tr.classList.contains('grp');
     var isSub=tr.classList.contains('sub-tot');
-    var isNrm=!isHdr&&!isTot&&!isGrp&&!isSub;
-    var rBg=isHdr?C1:isTot?CTB:(isGrp||isSub)?CGB:(ri%2===0?'#EEF4FF':'#FFFFFF');
-    var rFt=isHdr?'#FFFFFF':isTot?CTF:(isGrp||isSub)?CGF:'#222222';
-    var rFtW=(isHdr||isTot||isGrp||isSub)?'bold':'normal';
-    var rBT=isTot?'border-top:2px solid '+C1+';':isGrp?'border-top:1.5px solid '+CGB2+';':isSub?'border-top:1px solid '+CGB2+';':'';
-    var rBB=isTot?'border-bottom:2px solid '+C1+';':(isGrp||isSub)?'border-bottom:1.5px solid '+CGB2+';':'border-bottom:1px solid #D8E0EE;';
-    var rH=isHdr?'20pt':isTot?'18pt':(isGrp||isSub)?'16pt':'15pt';
+    var isNormal=!isHdr&&!isTot&&!isGrp&&!isSub;
+    var rowBg=isHdr?C_HDR:isTot?C_TOT_BG:(isGrp||isSub)?C_GRP_BG:(ri%2===0?'#EEF4FF':'#FFFFFF');
+    var rowFt=isHdr?'#FFFFFF':isTot?C_TOT_FT:(isGrp||isSub)?C_GRP_FT:'#222222';
+    var rowFtW=(isHdr||isTot||isGrp||isSub)?'bold':'normal';
+    var rowBT=isTot?'border-top:2px solid '+C_HDR+';':isGrp?'border-top:1.5px solid '+C_GRP_BR+';':isSub?'border-top:1px solid '+C_GRP_BR+';':'';
+    var rowBB=isTot?'border-bottom:2px solid '+C_HDR+';':isGrp?'border-bottom:1px solid '+C_GRP_BR+';':isSub?'border-bottom:1.5px solid '+C_GRP_BR+';':'border-bottom:1px solid #D8E0EE;';
+    var rowH=isHdr?'20pt':isTot?'18pt':(isGrp||isSub)?'16pt':'15pt';
     var cells='';
     tr.querySelectorAll('th,td').forEach(function(td){
       var t=td.textContent.trim().replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
       var clean=t.replace(/,/g,'').replace(/−/g,'-');
       var num=parseFloat(clean);
-      var isNum=!isNaN(num)&&clean!==''&&t!=='—'&&t!=='';
-      var dv;
+      var isDash=t==='—'||t==='-'||t==='';
+      var isNum=!isNaN(num)&&clean!==''&&!isDash;
+      var dispVal;
       if(isNum&&!isHdr){
-        var ab=Math.abs(num);
-        var pt=ab.toFixed(2).split('.');
-        pt[0]=pt[0].replace(/\B(?=(\d{3})+(?!\d))/g,',');
-        dv=num<-0.004?'('+pt[0]+'.'+pt[1]+')':pt[0]+'.'+pt[1];
-      }else{dv=t;}
-      var al=isNum?'center':'right';
-      var st='background:'+rBg+';color:'+rFt+';font-weight:'+rFtW+';text-align:'+al+';vertical-align:middle;'+rBT+rBB+'padding:5px 10px;font-family:'+FONT+';font-size:11pt;';
-      var tg=isHdr?'th':'td';
-      cells+='<'+tg+' style="'+st+'">'+dv+'</'+tg+'>';
+        var abs=Math.abs(num);
+        var parts=abs.toFixed(2).split('.');
+        parts[0]=parts[0].replace(/\B(?=(\d{3})+(?!\d))/g,',');
+        var fmt=parts[0]+'.'+parts[1];
+        dispVal=num<-0.004?'('+fmt+')':fmt;
+      } else { dispVal=t; }
+      var align=isNum?'center':'right';
+      var style='background:'+rowBg+';color:'+rowFt+';font-weight:'+rowFtW+';'
+        +'text-align:'+align+';vertical-align:middle;'
+        +rowBT+rowBB+'padding:5px 10px;font-family:'+FONT+';font-size:11pt;';
+      var tag=isHdr?'th':'td';
+      cells+='<'+tag+' style="'+style+'">'+dispVal+'</'+tag+'>';
     });
-    tbody+='<tr style="height:'+rH+';">'+cells+'</tr>';
-    if(isNrm)ri++;
+    tbody+='<tr style="height:'+rowH+';">'+cells+'</tr>';
+    if(isNormal)ri++;
   });
-  var html='<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:x="urn:schemas-microsoft-com:office:excel" xmlns="http://www.w3.org/TR/REC-html40"><head><meta charset="UTF-8"><!--[if gte mso 9]><xml><x:ExcelWorkbook><x:ExcelWorksheets><x:ExcelWorksheet><x:Name>تقرير</x:Name><x:WorksheetOptions><x:DisplayRightToLeft/></x:WorksheetOptions></x:ExcelWorksheet></x:ExcelWorksheets></x:ExcelWorkbook></xml><![endif]--><style>table{border-collapse:collapse;width:100%}th,td{border:1px solid #C8D4E8;}</style></head><body dir="rtl"><table>'+colTags+tbody+'</table></body></html>';
+  var html='<html xmlns:o="urn:schemas-microsoft-com:office:office"'
+    +' xmlns:x="urn:schemas-microsoft-com:office:excel"'
+    +' xmlns="http://www.w3.org/TR/REC-html40">'
+    +'<head><meta charset="UTF-8">'
+    +'<!--[if gte mso 9]><xml><x:ExcelWorkbook><x:ExcelWorksheets><x:ExcelWorksheet>'
+    +'<x:Name>تقرير</x:Name>'
+    +'<x:WorksheetOptions><x:DisplayRightToLeft/></x:WorksheetOptions>'
+    +'</x:ExcelWorksheet></x:ExcelWorksheets></x:ExcelWorkbook></xml><![endif]-->'
+    +'<style>table{border-collapse:collapse;width:100%}th,td{border:1px solid #C8D4E8;}</style></head>'
+    +'<body dir="rtl"><table>'+colTags+tbody+'</table></body></html>';
   var blob=new Blob(['﻿'+html],{type:'application/vnd.ms-excel;charset=UTF-8'});
+  var url=URL.createObjectURL(blob);
+  var a=document.createElement('a');a.href=url;a.download=fname+'.xls';
+  document.body.appendChild(a);a.click();
+  setTimeout(function(){document.body.removeChild(a);URL.revokeObjectURL(url);},100);
+}
+    });
+    rows+='<Row ss:Height="18">'+cells+'</Row>';
+  });
+  var xml='<?xml version="1.0" encoding="UTF-8"?><?mso-application progid="Excel.Sheet"?>'
+    +'<Workbook xmlns="urn:schemas-microsoft-com:office:spreadsheet" xmlns:ss="urn:schemas-microsoft-com:office:spreadsheet">'
+    +'<Styles><Style ss:ID="hdr"><Font ss:Bold="1" ss:Color="#FFFFFF"/><Interior ss:Color="#1F4E79" ss:Pattern="Solid"/>'
+    +'<Alignment ss:Horizontal="Right" ss:ReadingOrder="RightToLeft"/></Style>'
+    +'<Style ss:ID="num"><Alignment ss:Horizontal="Center"/><NumberFormat ss:Format="#,##0.00"/></Style>'
+    +'<Style ss:ID="txt"><Alignment ss:Horizontal="Right" ss:ReadingOrder="RightToLeft"/></Style></Styles>'
+    +'<Worksheet ss:Name="تقرير"><Table>'+rows+'</Table>'
+    +'<WorksheetOptions xmlns="urn:schemas-microsoft-com:office:excel"><DisplayRightToLeft/></WorksheetOptions>'
+    +'</Worksheet></Workbook>';
+  var blob=new Blob(['﻿'+xml],{type:'application/vnd.ms-excel;charset=UTF-8'});
   var url=URL.createObjectURL(blob);
   var a=document.createElement('a');a.href=url;a.download=fname+'.xls';
   document.body.appendChild(a);a.click();
