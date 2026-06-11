@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
-<title>حساب الأستاذ — المتحدون | 20260611130923</title>
+<title>حساب الأستاذ — المتحدون | 20260611131349</title>
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Cairo:wght@400;600;700&display=swap" rel="stylesheet">
 <style>
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
@@ -215,7 +215,7 @@ html,body{height:100%;background:var(--bg);color:var(--t1);font-family:var(--fon
   <div class="logo">GL</div>
   <div class="brand">
     <b>المتحدون للمقاولات العامة</b>
-    <span style="font-size:10px;color:var(--t2)">حساب الأستاذ العام · أحمد كامل · آخر تحديث: 2026/06/11  13:09:23</span>
+    <span style="font-size:10px;color:var(--t2)">حساب الأستاذ العام · أحمد كامل · آخر تحديث: 2026/06/11  13:13:49</span>
   </div>
   <div class="top-search" onclick="openS()">⌕</div>
 </div>
@@ -689,14 +689,21 @@ function _mRptExcel(tblId,fname,acc){
       else if(isSub)  ftC='#7B4F00';
       else if(isTot) ftC=isNum?(ci===1?'#1565C0':ci===2?'#C0392B':num>0.005?'#1A6B3A':num<-0.005?'#C0392B':'#1F3864'):'#1F3864';
       else            ftC=isNum?(ci===1?'#1565C0':ci===2?'#C0392B':num>0.005?'#1A6B3A':num<-0.005?'#C0392B':'#555555'):'#222222';
-      var numFmt=isNum?'mso-number-format:"_(* #\,##0\.00_);_(* (#\,##0\.00);_(* \"-\"??_);_(@_)";':'';
+      var numFmt='';
       var align=isNum?'center':'right';
       var cellBg=(isHdr||isTot||isGrp||isSub)?rowBg:(ci===0?(ri%2===0?'#EEF4FF':'#FFFFFF'):'#FFFFFF');
       var style='background:'+cellBg+';color:'+ftC+';font-weight:'+rowFtW+';'
         +'text-align:'+align+';vertical-align:middle;'+rowBorderTop+rowBorderBot+'padding:4px 10px;'+numFmt
         +'font-family:'+FONT+';font-size:11pt;';
       var tag=isHdr?'th':'td';
-      cells+='<'+tag+' style="'+style+'">'+(isNum&&!isHdr?num:t)+'</'+tag+'>';
+      var dv;
+      if(isNum&&!isHdr){
+        var ab=Math.abs(num);
+        var pt=ab.toFixed(2).split('.');
+        pt[0]=pt[0].replace(/\B(?=(\d{3})+(?!\d))/g,',');
+        dv=num<-0.004?'('+pt[0]+'.'+pt[1]+')':pt[0]+'.'+pt[1];
+      }else{dv=t;}
+      cells+='<'+tag+' style="'+style+'">'+dv+'</'+tag+'>';
     });
     tbody+='<tr style="height:'+rowH+';">'+cells+'</tr>';
     if(!isHdr&&!isGrp&&!isSub&&!isTot)ri++;
