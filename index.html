@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
-<title>حساب الأستاذ — المتحدون | 20260616222008</title>
+<title>حساب الأستاذ — المتحدون | 20260616233738</title>
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Cairo:wght@400;600;700&display=swap" rel="stylesheet">
 <style>
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
@@ -215,7 +215,7 @@ html,body{height:100%;background:var(--bg);color:var(--t1);font-family:var(--fon
   <div class="logo">GL</div>
   <div class="brand">
     <b>المتحدون للمقاولات العامة</b>
-    <span style="font-size:10px;color:var(--t2)">حساب الأستاذ العام · أحمد كامل · آخر تحديث: 2026/06/16  22:20:08</span>
+    <span style="font-size:10px;color:var(--t2)">حساب الأستاذ العام · أحمد كامل · آخر تحديث: 2026/06/16  23:37:38</span>
   </div>
   <div class="top-search" onclick="openS()">⌕</div>
 </div>
@@ -408,7 +408,7 @@ function buildSecs(accs){
       const nc=Math.abs(_net2)<.1?'z':(_net2>0?'p':'n');
       const nt=Math.abs(_net2)<.1?'—':(_net2>0?'+':'')+S(_net2);
       const r=document.createElement('div');r.className='acc-row';r.dataset.id=a.id;
-      r.innerHTML=`<div class="acc-row-l"><div class="acc-dot" style="background:${m.dot}"></div><span class="acc-nm" title="${a.name}">${a.name}</span></div><div class="acc-row-r"><span class="acc-net ${nc}">${nt}</span><span class="acc-ct">${_cnt2} قيد</span></div><span class="acc-arr">&#8249;</span>`;
+      r.innerHTML=`<div class="acc-row-l"><div class="acc-dot" style="background:${m.dot}"></div><span class="acc-nm" title="${a.name}">${a.alias||a.name}</span></div><div class="acc-row-r"><span class="acc-net ${nc}">${nt}</span><span class="acc-ct">${_cnt2} قيد</span></div><span class="acc-arr">&#8249;</span>`;
       r.onclick=()=>openA(a.id);g.appendChild(r);
     });
   });
@@ -653,7 +653,7 @@ function _mRptExcel(tblId,fname,acc){
   var tbl=document.getElementById(tblId);if(!tbl)return;
   var COL_W=['190','75','75','75','75'];
   var now=new Date().toLocaleDateString('ar-EG',{year:'numeric',month:'long',day:'numeric'});
-  var accName=acc&&acc.name?acc.name:'';
+  var accName=acc?(acc.alias||acc.name):'';
   var firstRow=tbl.querySelector('tr');
   var nCols=firstRow?firstRow.querySelectorAll('th,td').length:4;
   var colTags='';
@@ -822,7 +822,7 @@ function _buildPrintHTML(acc, rows, kDr, kCr, kNet, parts, extraTh, extraKey, nc
       +xtd+'</tr>';
   });
   return '<!DOCTYPE html><html lang="ar" dir="rtl"><head><meta charset="UTF-8">'
-    +'<title>حساب الأستاذ — '+acc.name+'</title>'
+    +'<title>حساب الأستاذ — '+(acc.alias||acc.name)+'</title>'
     +'<style>'
     +'*{margin:0;padding:0;box-sizing:border-box}'
     +'*{-webkit-print-color-adjust:exact!important;print-color-adjust:exact!important}'
@@ -844,7 +844,7 @@ function _buildPrintHTML(acc, rows, kDr, kCr, kNet, parts, extraTh, extraKey, nc
     +'<table>'
     +'<thead>'
     +'<tr><td colspan="'+nc+'" class="h1">شركة المتحدون للمقاولات العامة &nbsp;—&nbsp; أحمد كامل</td></tr>'
-    +'<tr><td colspan="'+nc+'" class="h2">حساب الأستاذ &nbsp;—&nbsp; '+acc.name+' &nbsp;—&nbsp; 2026'+(parts.length?' &nbsp;·&nbsp; '+parts.join(' · '):'')+'</td></tr>'
+    +'<tr><td colspan="'+nc+'" class="h2">حساب الأستاذ &nbsp;—&nbsp; '+(acc.alias||acc.name)+' &nbsp;—&nbsp; 2026'+(parts.length?' &nbsp;·&nbsp; '+parts.join(' · '):'')+'</td></tr>'
     +'<tr class="kpi-row">'
     +'<td colspan="2" class="ky"><div class="kpi-lbl">إجمالي المدين</div><div class="kpi-val" style="color:#1F4E79">'+N(kDr,2)+'</div></td>'
     +'<td colspan="2" class="ky"><div class="kpi-lbl">إجمالي الدائن</div><div class="kpi-val" style="color:#C00000">'+N(kCr,2)+'</div></td>'
