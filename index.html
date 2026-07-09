@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
-<title>حساب الأستاذ — المتحدون | 20260709125318</title>
+<title>حساب الأستاذ — المتحدون | 20260709131443</title>
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Cairo:wght@400;600;700&display=swap" rel="stylesheet">
 <style>
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
@@ -215,7 +215,7 @@ html,body{height:100%;background:var(--bg);color:var(--t1);font-family:var(--fon
   <div class="logo">GL</div>
   <div class="brand">
     <b>المتحدون للمقاولات العامة</b>
-    <span style="font-size:10px;color:var(--t2)">حساب الأستاذ العام · أحمد كامل · آخر تحديث: 2026/07/09  12:53:18</span>
+    <span style="font-size:10px;color:var(--t2)">حساب الأستاذ العام · أحمد كامل · آخر تحديث: 2026/07/09  13:14:43</span>
   </div>
   <div class="top-search" onclick="openS()">⌕</div>
 </div>
@@ -295,6 +295,36 @@ html,body{height:100%;background:var(--bg);color:var(--t1);font-family:var(--fon
       <div class="stbar"><span id="st-n">—</span><span id="st-c">—</span></div>
     </div>
 
+  <div id="vproj" style="display:none;flex-direction:column;padding:14px;overflow-y:auto;flex:1;">
+    <div class="rep-filt" id="proj-filt-bar">
+      <span style="font-size:10px;color:var(--t3);font-weight:700">🏗️ المشروع</span>
+      <div class="rep-sep"></div>
+      <button class="rep-btn" id="pj-prevyear-btn">+ إظهار سنة سابقة</button>
+    </div>
+    <div class="chart-kpis" style="grid-template-columns:repeat(2,1fr)">
+      <div class="ck"><div class="ck-lbl">الإيرادات</div><div class="ck-val" id="pj-k-rev">—</div></div>
+      <div class="ck"><div class="ck-lbl">هامش إجمالي</div><div class="ck-val" id="pj-k-gm">—</div></div>
+      <div class="ck"><div class="ck-lbl">EBITDA</div><div class="ck-val" id="pj-k-ebitda">—</div></div>
+      <div class="ck"><div class="ck-lbl">صافي الربح</div><div class="ck-val" id="pj-k-net">—</div></div>
+    </div>
+    <div class="chart-card full">
+      <div class="chart-title">🌊 تحليل الربحية — P&amp;L Waterfall<span id="proj-title-tag" style="font-weight:400;font-size:10px;color:var(--t3)"></span></div>
+      <div class="chart-wrap tall"><canvas id="pj-chart"></canvas></div>
+      <div class="ins-box" id="pj-insight"></div>
+      <div class="wf-detail">
+        <div class="wf-detail-toggle" id="pj-detail-toggle"><span class="wf-toggle-icon" id="pj-tog-icon">▶</span><span>عرض تفاصيل التصنيف</span></div>
+        <div id="pj-detail-body" style="display:none"></div>
+      </div>
+      <div style="margin-top:16px;border-top:1px solid rgba(255,255,255,0.08);padding-top:16px">
+        <div style="font-size:12px;font-weight:700;color:var(--t2);margin-bottom:10px">ملخص المراحل</div>
+        <table style="width:100%;border-collapse:collapse;font-size:12px">
+          <thead><tr style="color:var(--t3);font-size:10px;text-transform:uppercase" id="pj-stage-head"></tr></thead>
+          <tbody id="pj-stage-rows"></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
   <div id="vrep" style="display:none;flex-direction:column;padding:14px;overflow-y:auto;flex:1;">
   <div class="rep-filt">
     <button class="rep-btn on" data-rp="all" onclick="setRepF('all')">2026</button>
@@ -338,6 +368,7 @@ html,body{height:100%;background:var(--bg);color:var(--t1);font-family:var(--fon
   <div class="mt" onclick="fcat('expenses');closeMore()">📊 مصروفات</div>
   <div class="mt" onclick="fcat('zero');closeMore()">○ رصيد صفر</div>
   <div class="mt" onclick="showRep();closeMore()">📊 التقارير والرسوم</div>
+  <div class="mt" onclick="showProjects();closeMore()">🏗️ تحليل المشاريع</div>
 </div>
 
 <!-- Search overlay -->
@@ -473,6 +504,8 @@ function openCF(){
   const totDr=CF_DATA.reduce((s,r)=>s+r.dr,0);
   const totCr=CF_DATA.reduce((s,r)=>s+r.cr,0);
   document.getElementById('vd').style.display='none';
+  var _vp4=document.getElementById('vproj');if(_vp4)_vp4.style.display='none';
+  var _vr4=document.getElementById('vrep');if(_vr4)_vr4.style.display='none';
   const va=document.getElementById('va');va.style.display='flex';va.style.flexDirection='column';va.style.height='100%';
   document.getElementById('a-nm').textContent='التدفقات النقدية — Cash Flow';
   window._cfAcc={entries:CF_DATA.map(function(r){return{seq:r.seq,date:String(r.month||''),desc:r.desc,opp:r.acc||'',dr:r.dr||0,cr:r.cr||0};}),dr:totDr,cr:totCr,net:lastBal};
@@ -514,6 +547,7 @@ function fcat(cat){
   CUR=cat;
   var _vr=document.getElementById('vrep');if(_vr)_vr.style.display='none';
   var _vd=document.getElementById('vd');if(_vd)_vd.style.display='block';
+  var _vp5=document.getElementById('vproj');if(_vp5)_vp5.style.display='none';
   document.querySelectorAll('.nav-i').forEach(x=>x.classList.remove('on'));
   document.querySelectorAll('.bt').forEach(x=>x.classList.remove('on'));
   const ni=document.getElementById('ni-'+cat),bi=document.getElementById('bt-'+cat);
@@ -885,6 +919,8 @@ function printAcc(){
 function openA(id){
   const a=D.find(x=>x.id===id);if(!a)return;LAST=CUR;
   document.getElementById('vd').style.display='none';
+  var _vp6=document.getElementById('vproj');if(_vp6)_vp6.style.display='none';
+  var _vr6=document.getElementById('vrep');if(_vr6)_vr6.style.display='none';
   var mpb=document.getElementById('m-print-btn');if(mpb)mpb.style.display='flex';
   const va=document.getElementById('va');va.style.display='flex';va.style.flexDirection='column';va.style.height='100%';
   const m=CM[a.cat]||{};
@@ -1552,7 +1588,7 @@ function showRep(){
   var vr=document.getElementById('view-reports');
   if(vr){vr.style.display='flex';vr.style.flexDirection='column';}
   /* mobile */
-  ['vd','va','vcf'].forEach(function(id){var el=document.getElementById(id);if(el)el.style.display='none';});
+  ['vd','va','vcf','vproj'].forEach(function(id){var el=document.getElementById(id);if(el)el.style.display='none';});
   var vrm=document.getElementById('vrep');
   if(vrm){vrm.style.display='flex';vrm.style.flexDirection='column';}
   /* mobile nav */
@@ -1764,6 +1800,13 @@ function showProjects(){
   ['view-dash','view-acc','view-cf','view-reports'].forEach(function(id){var el=document.getElementById(id); if(el) el.style.display='none';});
   var vp=document.getElementById('view-projects');
   if(vp){vp.style.display='block';}
+  /* mobile */
+  ['vd','va','vcf','vrep'].forEach(function(id){var el=document.getElementById(id);if(el)el.style.display='none';});
+  var vpm=document.getElementById('vproj');
+  if(vpm){vpm.style.display='flex';vpm.style.flexDirection='column';}
+  /* mobile nav */
+  document.querySelectorAll('.bt').forEach(function(b){b.classList.remove('on');});
+  var bp=document.getElementById('bt-proj');if(bp)bp.classList.add('on');
   buildProjectFilterBar();
   if(typeof Chart!=='undefined'){ setTimeout(renderProjectsBreakdown, 30); }
   var pt=document.getElementById('pj-detail-toggle');
